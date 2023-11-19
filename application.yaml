@@ -1,0 +1,26 @@
+piVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-argo-app
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/truegilb/argocd-app.git
+    targetRevision: HEAD
+    # track the path inside git repo
+    path: dev
+  destination: 
+    # use default svc as ArgoCD is running in the same cluster the app is being deployed to
+    server: https://kubernetes.default.svc
+    namespace: myapp
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+    automated:
+      selfHeal: true
+      prune: true
+
